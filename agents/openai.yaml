@@ -1,0 +1,4 @@
+interface:
+  display_name: "Map Calls"
+  short_description: "Trace source calls into editable draw.io graphs"
+  default_prompt: "Use $map-calls to map calls from the function I specify into an editable draw.io diagram."

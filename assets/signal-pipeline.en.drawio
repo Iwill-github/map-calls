@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="signal-pipeline" name="Signal pipeline">
+    <mxGraphModel tooltips="1" fold="1" connect="1" page="1" pageWidth="1005" pageHeight="568">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object id="api" label="analyzeSignal">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="30" y="32" width="170" height="38" />
+          </mxCell>
+        </object>
+        <object id="api-tooltip" label="" tooltip="SignalStats analyzeSignal(SignalView input, FilterMode mode)&#10;&#10;Purpose&#10;Filter a signal and report its count, mean, and peak magnitude.&#10;&#10;Parameters&#10;- input: The signal view containing the input buffer and sample count.&#10;- mode: The filter selection.&#10;&#10;Source&#10;demo/signal_pipeline.cc:93">
+          <mxCell parent="api" vertex="1" connectable="0" style="ellipse;aspect=fixed;fillColor=#FFD966;strokeColor=#B58D17;strokeWidth=1;tooltipCell=1;movable=0;resizable=0;rotatable=0;deletable=0;">
+            <mxGeometry x="1" y="0" width="11" height="11" relative="1" as="geometry">
+              <mxPoint x="-16" y="5" as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="choose" label="selectFilter" tooltip="Filter selectFilter(FilterMode mode)&#10;&#10;Purpose&#10;Select the first difference for FilterMode::firstDifference and the moving average otherwise.&#10;&#10;Parameters&#10;- mode: The filter selection.&#10;&#10;Source&#10;demo/signal_pipeline.cc:50">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="252" y="53" width="165" height="38" />
+          </mxCell>
+        </object>
+        <object id="loop" label="summarizeSignal" tooltip="SignalStats summarizeSignal(SignalView input, Filter filter)&#10;&#10;Purpose&#10;Call the selected filter for each sample and calculate the statistics.&#10;&#10;Parameters&#10;- input: The signal view containing the input buffer and sample count.&#10;- filter: The callback invoked for each sample.&#10;&#10;Source&#10;demo/signal_pipeline.cc:80">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="240" y="174" width="195" height="38" />
+          </mxCell>
+        </object>
+        <object id="average" label="movingAverage" tooltip="float movingAverage(SignalView input, std::size_t index)&#10;&#10;Purpose&#10;Average the current sample and its two preceding samples. Repeat the first sample at the start.&#10;&#10;Parameters&#10;- input: The signal view containing the input buffer and sample count.&#10;- index: The zero-based sample index.&#10;&#10;Source&#10;demo/signal_pipeline.cc:38">
+          <mxCell parent="1" vertex="1" style="swimlane;startSize=38;horizontal=1;collapsible=1;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="530" y="96" width="200" height="120">
+              <mxRectangle x="530" y="96" width="200" height="38" as="alternateBounds" />
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="window" label="averageWindow" tooltip="float averageWindow(float first, float middle, float last)&#10;&#10;Purpose&#10;Calculate the arithmetic mean of three samples.&#10;&#10;Parameters&#10;- first: The earliest sample in the window.&#10;- middle: The middle sample in the window.&#10;- last: The current sample in the window.&#10;&#10;Source&#10;demo/signal_pipeline.cc:33">
+          <mxCell parent="average" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="8" y="60" width="184" height="36" />
+          </mxCell>
+        </object>
+        <object id="difference" label="firstDifference" tooltip="float firstDifference(SignalView input, std::size_t index)&#10;&#10;Purpose&#10;Subtract the preceding sample from the current sample.&#10;&#10;Parameters&#10;- input: The signal view containing the input buffer and sample count.&#10;- index: The zero-based sample index.&#10;&#10;Source&#10;demo/signal_pipeline.cc:45">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="541" y="261" width="178" height="38" />
+          </mxCell>
+        </object>
+        <object id="previous" label="previousIndex" tooltip="std::size_t previousIndex(std::size_t index)&#10;&#10;Purpose&#10;Return the preceding index, clamped to zero.&#10;&#10;Parameters&#10;- index: The zero-based sample index.&#10;&#10;Source&#10;demo/signal_pipeline.cc:20">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="808" y="57" width="158" height="38" />
+          </mxCell>
+        </object>
+        <object id="read" label="sampleAt" tooltip="float sampleAt(SignalView input, std::size_t index)&#10;&#10;Purpose&#10;Read a sample at the given index.&#10;&#10;Parameters&#10;- input: The signal view containing the input buffer and sample count.&#10;- index: The zero-based sample index.&#10;&#10;Source&#10;demo/signal_pipeline.cc:28">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="808" y="273" width="158" height="38" />
+          </mxCell>
+        </object>
+        <object id="update" label="updateStats" tooltip="void updateStats(SignalStats&amp; stats, float sample)&#10;&#10;Purpose&#10;Accumulate a sample for the mean and update the peak magnitude.&#10;&#10;Parameters&#10;- stats: The accumulated signal statistics, updated in place.&#10;- sample: The filtered sample value.&#10;&#10;Source&#10;demo/signal_pipeline.cc:74">
+          <mxCell parent="1" vertex="1" style="swimlane;startSize=38;horizontal=1;collapsible=1;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;" collapsed="1">
+            <mxGeometry as="geometry" x="530" y="373" width="220" height="38">
+              <mxRectangle x="530" y="373" width="220" height="174" as="alternateBounds" />
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="peak" label="trackPeak" tooltip="void trackPeak(float&amp; peak, float sample)&#10;&#10;Purpose&#10;Raise the peak when this sample has a larger magnitude.&#10;&#10;Parameters&#10;- peak: The peak magnitude accumulated so far, updated in place.&#10;- sample: The filtered sample value.&#10;&#10;Source&#10;demo/signal_pipeline.cc:66">
+          <mxCell parent="update" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="10" y="58" width="200" height="36" />
+          </mxCell>
+        </object>
+        <object id="magnitude" label="sampleMagnitude" tooltip="float sampleMagnitude(float sample)&#10;&#10;Purpose&#10;Calculate the absolute value of a filtered sample.&#10;&#10;Parameters&#10;- sample: The filtered sample value.&#10;&#10;Source&#10;demo/signal_pipeline.cc:58">
+          <mxCell parent="update" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="10" y="113" width="200" height="36" />
+          </mxCell>
+        </object>
+        <object id="guard" label="input.samples == nullptr || input.count == 0" tooltip="analyzeSignal&#10;demo/signal_pipeline.cc:95">
+          <mxCell parent="1" vertex="1" style="shape=rhombus;whiteSpace=wrap;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=12;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="18" y="115" width="194" height="84" />
+          </mxCell>
+        </object>
+        <object id="empty" label="return {};">
+          <mxCell parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;fontSize=18;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" x="45" y="248" width="140" height="34" />
+          </mxCell>
+        </object>
+        <object id="api-guard" label="" tooltip="demo/signal_pipeline.cc:95">
+          <mxCell source="api" target="guard" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;">
+            <mxGeometry as="geometry" relative="1">
+              <Array as="points">
+                <mxPoint x="115" y="95" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <mxCell source="guard" target="empty" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;fontSize=14;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;" id="guard-empty" value="Yes">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <object id="guard-choose" label="" tooltip="demo/signal_pipeline.cc:98">
+          <mxCell source="guard" target="choose" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;">
+            <mxGeometry as="geometry" relative="1">
+              <Array as="points">
+                <mxPoint x="230" y="157" />
+                <mxPoint x="230" y="72" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="guard-loop" label="No" tooltip="demo/signal_pipeline.cc:99">
+          <mxCell source="guard" target="loop" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;fontSize=14;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" relative="1">
+              <Array as="points">
+                <mxPoint x="230" y="157" />
+                <mxPoint x="230" y="193" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="dispatch-average" label="movingAverage" tooltip="mode != FilterMode::firstDifference&#10;The selected function pointer is called for each sample.&#10;Assignment: demo/signal_pipeline.cc:98&#10;Selection: demo/signal_pipeline.cc:52&#10;Call: demo/signal_pipeline.cc:84">
+          <mxCell source="loop" target="average" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.25;exitPerimeter=0;entryX=0;entryY=0;entryPerimeter=0;strokeColor=#9673A6;strokeWidth=2;fontColor=#694791;fontSize=14;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;entryDy=19;">
+            <mxGeometry as="geometry" relative="1">
+              <Array as="points">
+                <mxPoint x="470" y="183.5" />
+                <mxPoint x="470" y="115" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="dispatch-difference" label="firstDifference" tooltip="mode == FilterMode::firstDifference&#10;The selected function pointer is called for each sample.&#10;Assignment: demo/signal_pipeline.cc:98&#10;Selection: demo/signal_pipeline.cc:52&#10;Call: demo/signal_pipeline.cc:84">
+          <mxCell source="loop" target="difference" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.75;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;strokeColor=#9673A6;strokeWidth=2;fontColor=#694791;fontSize=14;fontStyle=1;fontFamily=Times New Roman,Helvetica,Arial,sans-serif;">
+            <mxGeometry as="geometry" relative="1">
+              <Array as="points">
+                <mxPoint x="470" y="202.5" />
+                <mxPoint x="470" y="280" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <mxCell source="loop" target="update" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0;entryPerimeter=0;entryDy=19;" id="loop-update" value="">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="337.5" y="392" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell source="average" target="window" parent="average" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;exitDy=38;" id="average-window" value="">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell source="average" target="previous" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0;exitPerimeter=0;entryX=0;entryY=0.32;entryPerimeter=0;exitDy=8;" id="average-previous" value="">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="773" y="104" />
+              <mxPoint x="773" y="69.16" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell source="average" target="read" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0;exitPerimeter=0;entryX=0;entryY=0.3;entryPerimeter=0;jumpStyle=arc;exitDy=29;" id="average-read" value="">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="751" y="125" />
+              <mxPoint x="751" y="284.4" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell source="difference" target="previous" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.3;exitPerimeter=0;entryX=0;entryY=0.75;entryPerimeter=0;jumpStyle=arc;" id="difference-previous" value="">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="786" y="272.4" />
+              <mxPoint x="786" y="85.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell source="difference" target="read" parent="1" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.72;exitPerimeter=0;entryX=0;entryY=0.75;entryPerimeter=0;" id="difference-read" value="">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="763" y="288.36" />
+              <mxPoint x="763" y="301.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell source="update" target="peak" parent="update" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;exitDy=38;" id="update-peak" value="">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell source="peak" target="magnitude" parent="update" edge="1" style="noEdgeStyle=1;orthogonal=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" id="peak-magnitude" value="">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
