@@ -33,12 +33,12 @@ Map Calls is a Codex skill that traces source calls using the active build confi
 <tr>
 <td width="50%" valign="top" align="center">
 <a href="assets/tooltip-preview.png" title="View the animation at full size">
-<img src="assets/tooltip-preview.png" alt="In draw.io, the pointer hovers over the yellow marker at the upper-right corner of sumGrid to reveal its signature, purpose, parameters, and source location, then moves away to dismiss the tooltip." width="75%" />
+<img src="assets/tooltip-preview.png" alt="In draw.io, the pointer hovers over the yellow marker at the upper-right corner of sumGrid to reveal its signature, purpose, parameters, and source location, then moves away to dismiss the tooltip." width="90%" />
 </a>
 </td>
 <td width="50%" valign="top" align="center">
 <a href="assets/signal-pipeline-tooltip.png" title="View the animation at full size">
-<img src="assets/signal-pipeline-tooltip.png" alt="In draw.io, the pointer hovers over the yellow marker at the upper-right corner of analyzeSignal to reveal details about the input view and filter mode, then moves away to dismiss the tooltip." width="75%" />
+<img src="assets/signal-pipeline-tooltip.png" alt="In draw.io, the pointer hovers over the yellow marker at the upper-right corner of analyzeSignal to reveal details about the input view and filter mode, then moves away to dismiss the tooltip." width="90%" />
 </a>
 </td>
 </tr>
